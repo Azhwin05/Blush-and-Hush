@@ -40,14 +40,14 @@ export default function AdminLayout() {
                 }}
             />
             <Tabs.Screen
-                name="clients"
+                name="clients/index"
                 options={{
                     title: "Clients",
                     tabBarIcon: ({ color }) => <Feather name="user" size={24} color={color} />,
                 }}
             />
             <Tabs.Screen
-                name="managers"
+                name="managers/index"
                 options={{
                     title: "Managers",
                     tabBarIcon: ({ color }) => <Feather name="users" size={24} color={color} />,

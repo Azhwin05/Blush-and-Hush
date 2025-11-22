@@ -49,7 +49,13 @@ export default function ClientLayout() {
             <Tabs.Screen
                 name="update"
                 options={{
-                    href: null, // Hidden from tab bar
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="update/[id]"
+                options={{
+                    href: null,
                 }}
             />
         </Tabs>

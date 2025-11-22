@@ -1,22 +1,32 @@
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Pressable, Text, TextInput, View } from "react-native";
 
 export default function LoginScreen() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = () => {
-        // Mock login logic
-        if (email.includes("admin")) {
-            router.replace("/admin");
-        } else if (email.includes("manager")) {
-            router.replace("/manager");
-        } else {
-            router.replace("/client");
+    const handleLogin = async () => {
+        if (!email || !password) {
+            Alert.alert("Error", "Please enter both email and password.");
+            return;
         }
+
+        setLoading(true);
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        if (error) {
+            Alert.alert("Login Failed", error.message);
+            setLoading(false);
+        }
+        // Redirect is handled by AuthProvider in _layout.tsx
     };
 
     return (
@@ -56,9 +66,14 @@ export default function LoginScreen() {
 
                     <Pressable
                         onPress={handleLogin}
-                        className="bg-primary p-4 rounded-xl items-center mt-4 active:opacity-90"
+                        disabled={loading}
+                        className={`bg-primary p-4 rounded-xl items-center mt-4 active:opacity-90 ${loading ? "opacity-70" : ""}`}
                     >
-                        <Text className="font-sans font-semibold text-white text-lg">Login</Text>
+                        {loading ? (
+                            <ActivityIndicator color="white" />
+                        ) : (
+                            <Text className="font-sans font-semibold text-white text-lg">Login</Text>
+                        )}
                     </Pressable>
                 </View>
             </View>
